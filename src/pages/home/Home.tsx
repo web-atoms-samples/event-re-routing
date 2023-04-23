@@ -3,8 +3,11 @@ import { ContentPage } from "@web-atoms/web-controls/dist/mobile-app/MobileApp";
 import Action from "@web-atoms/core/dist/view-model/Action";
 import AtomRepeater from "@web-atoms/web-controls/dist/basic/AtomRepeater";
 import categories from "../../model/categories";
+import Bind from "@web-atoms/core/dist/core/Bind";
 
 export default class HomePage extends ContentPage {
+
+    private status: string = "";
 
     public async init() {
 
@@ -13,7 +16,7 @@ export default class HomePage extends ContentPage {
         this.renderer = <div data-layout="vertical-flex-stretch-items">
             <p>Direct Click, here you can define event-cilck on the element and pass the event handler function.</p>
             <button
-                event-click={() => alert("Direct click was clicked")}
+                event-click={() => this.status = "Direct click was clicked"}
                 text="Direct"/>
             <p>Routed click, here you specify an attribute `data-click-event` which can be a different event name.</p>
             <p>Event handler will receive all data attributes from parent elements, it is sent via proxy so it will be faster</p>
@@ -42,15 +45,21 @@ export default class HomePage extends ContentPage {
                 </div>}
                 />
         </div>;
+
+        this.footerRenderer = () => <div
+            style-display={Bind.oneWay(() => !!this.status)}
+            data-layout="command-row">
+            <p text={Bind.oneWay(() => this.status)}/>
+        </div>;
     }
 
     @Action({ onEvent: "button-click"})
     buttonClick({ label }) {
-        alert(`Button ${label} was clicked`);
+        this.status = `Button ${label} was clicked`;
     }
 
     @Action({ onEvent: "category-click"})
     categoryClick({ label }) {
-        alert(`Category ${label} was clicked`);
+        this.status = `Category ${label} was clicked`;
     }
 }
