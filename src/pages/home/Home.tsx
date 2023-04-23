@@ -4,6 +4,7 @@ import Action from "@web-atoms/core/dist/view-model/Action";
 import AtomRepeater from "@web-atoms/web-controls/dist/basic/AtomRepeater";
 import categories from "../../model/categories";
 import Bind from "@web-atoms/core/dist/core/Bind";
+import PopupService from "@web-atoms/core/dist/web/services/PopupService";
 
 export default class HomePage extends ContentPage {
 
@@ -15,9 +16,11 @@ export default class HomePage extends ContentPage {
 
         this.renderer = <div data-layout="vertical-flex-stretch-items">
             <p>Direct Click, here you can define event-cilck on the element and pass the event handler function.</p>
-            <button
-                event-click={() => this.status = "Direct click was clicked"}
-                text="Direct"/>
+            <div>
+                <button
+                    event-click={() => this.alert("Direct click was clicked")}
+                    text="Direct"/>
+            </div>
             <p>Routed click, here you specify an attribute `data-click-event` which can be a different event name.</p>
             <p>Event handler will receive all data attributes from parent elements, it is sent via proxy so it will be faster</p>
             <div
@@ -39,27 +42,29 @@ export default class HomePage extends ContentPage {
                 items={categories()}
                 itemRenderer={(item) => <div
                     data-click-event="category-click"
-                    data-layout="row">
+                    data-color="blue"
+                    data-layout="row"
+                    data-cursor="pointer">
                     <i class={item.icon}/>
-                    <span text={item.label}/>
+                    <span
+                        data-text-decoration="underline"
+                        text={item.label}/>
                 </div>}
                 />
-        </div>;
-
-        this.footerRenderer = () => <div
-            style-display={Bind.oneWay(() => !!this.status)}
-            data-layout="command-row">
-            <p text={Bind.oneWay(() => this.status)}/>
         </div>;
     }
 
     @Action({ onEvent: "button-click"})
     buttonClick({ label }) {
-        this.status = `Button ${label} was clicked`;
+        this.alert(`Button ${label} was clicked`);
     }
 
     @Action({ onEvent: "category-click"})
     categoryClick({ label }) {
-        this.status = `Category ${label} was clicked`;
+        this.alert(`Category ${label} was clicked`);
+    }
+
+    alert(message) {
+        return PopupService.alert({ message });
     }
 }
