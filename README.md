@@ -1,5 +1,5 @@
 # intro
-AtomRepeater control Example
+Event Rerouting Sample
 
 # Start
 
@@ -7,7 +7,7 @@ AtomRepeater control Example
 
 # Open sample in stackblitz.com
 
-https://stackblitz.com/~/github.com/web-atoms/intro
+https://stackblitz.com/~/github.com/web-atoms-samples/event-re-routing
 
 The project should automatically install, compile and load a simple http-server to serve the html/css/javascript files from the project.
 
